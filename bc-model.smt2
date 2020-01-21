@@ -92,6 +92,32 @@
 
 
 
+
+;nicht zwei accounts im selben block
+(
+    assert
+    (
+        forall((t1 Transaction) (t2 Transaction))
+        (
+            or
+            (
+            not
+            (=(transaction_block t1)(transaction_block t2))
+            )
+            (
+                not
+                (
+                    or
+                        (=(transaction_sender t1)(transaction_sender t2))
+                        (=(transaction_receiver t1)(transaction_receiver t2))
+                        (=(transaction_sender t1)(transaction_receiver t2))
+                        (=(transaction_receiver t1)(transaction_sender t2)) 
+                )
+            )
+        )
+    )
+)
+
 ;initial block der einzige der sein Vorgaenger sein kann 
 (
     assert
