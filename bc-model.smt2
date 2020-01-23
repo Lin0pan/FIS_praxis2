@@ -41,7 +41,7 @@
 )
 
 
-;Nicht mehr Senden als Geld hab
+;Nicht mehr Senden als Geld auf Konto
 (
     assert
     (
@@ -71,7 +71,7 @@
                         (balance (transaction_receiver transaction))
                     ) 
                     (
-                        balance (block_account (transaction_receiver transaction) block)
+                        balance (block_account (transaction_receiver transaction) (successor block))
                     )
                 )
 
@@ -81,7 +81,7 @@
                         (transaction_amount transaction) 
                     ) 
                     (
-                        balance (block_account (transaction_sender transaction) block)
+                        balance (block_account (transaction_sender transaction) (successor block))
                     )
                 )
 
@@ -93,7 +93,7 @@
 
 
 
-;nicht zwei accounts im selben block
+;nicht zwei Accounts im selben Block
 (
     assert
     (
@@ -108,8 +108,8 @@
                 not
                 (
                     or
-                        (=(transaction_sender t1)(transaction_sender t2))
-                        (=(transaction_receiver t1)(transaction_receiver t2))
+                        ;(=(transaction_sender t1)(transaction_sender t2))
+                        ;(=(transaction_receiver t1)(transaction_receiver t2))
                         (=(transaction_sender t1)(transaction_receiver t2))
                         (=(transaction_receiver t1)(transaction_sender t2)) 
                 )
@@ -118,7 +118,7 @@
     )
 )
 
-;initial block der einzige der sein Vorgaenger sein kann 
+;initial Block der einzige der sein Vorgaenger sein kann 
 (
     assert
         (=(predecessor initial) initial)
