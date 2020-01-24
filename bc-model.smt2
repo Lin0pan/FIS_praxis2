@@ -53,7 +53,7 @@
 )
 
 
-;Account im nachfolgenden Block angepasst 
+;Account-Balance im nachfolgenden Block angepasst 
 (                                               
     assert
     (
@@ -95,23 +95,23 @@
 
 ;nicht zwei Accounts im selben Block
 (
-    assert
+    assert 
     (
-        forall((t1 Transaction) (t2 Transaction))
+        not 
         (
-            or
+            exists((t1 Transaction) (t2 Transaction))
             (
-            not
-            (=(transaction_block t1)(transaction_block t2))
-            )
-            (
-                not
+                and
+                (= (transaction_block t1) (transaction_block t2))
+                (not (= t1 t2))
                 (
                     or
-                        ;(=(transaction_sender t1)(transaction_sender t2))
-                        ;(=(transaction_receiver t1)(transaction_receiver t2))
-                        (=(transaction_sender t1)(transaction_receiver t2))
-                        (=(transaction_receiver t1)(transaction_sender t2)) 
+                    (= (transaction_sender t1) (transaction_receiver t2))
+                    (= (transaction_receiver t1) (transaction_sender t2))
+                    (= (transaction_sender t1) (transaction_sender t2))
+                    (= (transaction_receiver t1) (transaction_receiver t2))
+                    (= (transaction_sender t1) (transaction_receiver t1))
+                    (= (transaction_sender t2) (transaction_receiver t2))
                 )
             )
         )
@@ -124,11 +124,31 @@
         (=(predecessor initial) initial)
 )
 
+
+;;bkabkkabkabkbak
+(
+    assert
+    (
+        forall((t1 Transaction))
+        (= 
+            (+
+                (balance(transaction_sender t1))
+                (balance(transaction_receiver t1))
+            )  
+            (+
+                (balance(block_account((transaction_receiver t1)(successor(transaction_block t1)))))
+                (balance(block_account((transaction_sender t1)(successor(transaction_block t1)))))
+            )
+        )
+    )
+)
+
+
+
+
 (check-sat)
 ;
 ;konstante initialblock
 ;funktionen: executeTransaction
 ;praedikat vorgaenger
 ;
-
-
