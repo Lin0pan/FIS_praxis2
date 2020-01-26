@@ -1,3 +1,4 @@
+;Author: Janek Speit
 ;BV1: 
 ;Hat ein Konto acc1 in einem Block b1 den Kontostand 42 und überweist in diesem Block den Betrag
 ;19 an ein anderes Konto, so hat acc1 im nächsten Block den Kontostand 23.
@@ -14,7 +15,12 @@
 (assert(=(transaction_amount t1) 19))
 (assert(=(transaction_block t1) b1))
 
-(assert(=(balance (block_account acc1 b2)) 23))
+;negierte BV1
+(assert
+    (not
+        (=(balance (block_account acc1 b2)) 23)
+    )
+)
 
+;erwarte UNSAT
 (check-sat)
-
